@@ -1,1 +1,5 @@
-* text=Objective-C
+*.js linguist-language=Objective-C 
+*.css linguist-language=Objective-C 
+*.html linguist-language=Objective-C 
+*.c linguist-language=Objective-C 
+*.cpp linguist-language=Objective-C 
