@@ -329,13 +329,8 @@ namespace flatbuffers {
                 return type_str;
             }
             
-            static std::string GenTypeBasic(const LanguageParameters &lang, const Parser &parser, const BaseType &type) {
-                static const char *ctypename[] = {
-#define FLATBUFFERS_TD(ENUM, IDLTYPE, CTYPE, JTYPE, GTYPE, NTYPE, PTYPE) \
-#NTYPE,
-                    FLATBUFFERS_GEN_TYPES(FLATBUFFERS_TD)
-#undef FLATBUFFERS_TD
-                };
+            static std::string GenTypeBasic(const BaseType &type) {
+                
                 std::string type_str;
                 switch (type) {
                     case BASE_TYPE_BOOL:
@@ -383,7 +378,7 @@ namespace flatbuffers {
             }
 
             
-            static std::string GenTypePointer(const LanguageParameters &lang, const Parser &parser, const Type &type) {
+            static std::string GenTypePointer(const Parser &parser, const Type &type) {
                 switch (type.base_type) {
                     case BASE_TYPE_STRING:
                         return "NSString";
@@ -398,10 +393,10 @@ namespace flatbuffers {
                 }
             }
             
-            static std::string GenTypeGet(const LanguageParameters &lang, const Parser &parser, const Type &type) {
+            static std::string GenTypeGet(const Parser &parser, const Type &type) {
                 return IsScalar(type.base_type)
-                ? GenTypeBasic(lang, parser, type.base_type)
-                : GenTypePointer(lang, parser, type);
+                ? GenTypeBasic(type.base_type)
+                : GenTypePointer(parser, type);
             }
             
             // Find the destination type the user wants to receive the value in (e.g.
@@ -426,7 +421,7 @@ namespace flatbuffers {
             // Generate destination type name
             static std::string GenTypeNameDest(const LanguageParameters &lang, const Parser &parser, const Type &type)
             {
-                return GenTypeGet(lang, parser, DestinationType(lang, parser, type, true));
+                return GenTypeGet(parser, DestinationType(lang, parser, type, true));
             }
             
             // Mask to turn serialized value into destination type value.
@@ -508,7 +503,7 @@ namespace flatbuffers {
                 // That, and Java Enums are expensive, and not universally liked.
                 
                 GenComment(enum_def.doc_comment, code_ptr, &lang.comment_config);
-                code += lang.enum_decl + GenTypeBasic(lang, parser, enum_def.underlying_type.base_type)+nameSpace(parser) + ", " + enum_def.name + ") ";
+                code += lang.enum_decl + GenTypeBasic(enum_def.underlying_type.base_type)+nameSpace(parser) + ", " + enum_def.name + ") ";
                 code += lang.open_curly;
 
                 for (auto it = enum_def.vals.vec.begin();
@@ -558,9 +553,9 @@ namespace flatbuffers {
                     auto &field = **it;
                     if (field.deprecated) continue;
                     GenComment(field.doc_comment, code_ptr, &lang.comment_config, "  ");
-                    std::string type_name = GenTypeGet(lang, parser, field.value.type);
+                    std::string type_name = GenTypeGet(parser, field.value.type);
 //                    std::string type_name_dest = GenTypeNameDest(lang, parser, field.value.type);
-                    std::string type_name_dest = GenTypeGet(lang, parser, field.value.type);
+                    std::string type_name_dest = GenTypeGet(parser, field.value.type);
                     std::string dest_mask = DestinationMask(lang, field.value.type, true);
                     std::string dest_cast = DestinationCast(lang, parser, field.value.type);
                     std::string src_cast = SourceCast(lang, parser, field.value.type);
