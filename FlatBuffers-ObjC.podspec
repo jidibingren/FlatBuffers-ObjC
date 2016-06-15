@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "FlatBuffers-ObjC"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "FlatBuffers Objective-C implementation"
   s.homepage     = "https://github.com/jidibingren/FlatBuffers-ObjC"
   s.license      = 'MIT'

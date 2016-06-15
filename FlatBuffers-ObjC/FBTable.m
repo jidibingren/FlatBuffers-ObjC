@@ -11,10 +11,11 @@
 
 @implementation FBTable 
 
-+ (instancetype)getRootAs:(FBMutableData*)_bb {
++ (instancetype)getRootAs:(NSData*)data {
+
+    FBMutableData *_bb = [[FBMutableData alloc]initWithData:data];
     
     return [[[self class] alloc] init:[_bb getInt32 :0] bb:_bb];
-    
 }
 
 + (BOOL)verifier:(NSData*)data{

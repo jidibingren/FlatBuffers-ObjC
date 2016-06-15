@@ -19,7 +19,7 @@
     FBMutableData *bb;
 }
 
-+ (instancetype)getRootAs:(FBMutableData*)_bb ;
++ (instancetype)getRootAs:(NSData*)data;
 
 + (BOOL)verifier:(NSData*)data;
 
