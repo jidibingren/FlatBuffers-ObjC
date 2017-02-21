@@ -256,17 +256,17 @@
 
 - (float)getFloat:(int)offset{
     
-    int32_t temp = 0;
+    float temp = 0.0f;
     
     [self.parent getBytes:&temp range:NSMakeRange(offset, self.parent.length  >= (offset + 4) ? 4 : 0)];
     
-    return (float)temp;
+    return temp;
     
 }
 
 - (void)setFloat:(float)value offset:(int)offset{
     
-    int32_t temp = value;
+    float temp = value;
     
     [self.parent replaceBytesInRange:NSMakeRange(offset, self.parent.length  >= (offset + 4) ? 4 : 0) withBytes:&temp];
     
@@ -277,7 +277,7 @@
 
 - (double)getDouble:(int)offset{
     
-    int64_t temp = 0;
+    double temp = 0.0;
     
     [self.parent getBytes:&temp range:NSMakeRange(offset, self.parent.length  >= (offset + 8) ? 8 : 0)];
     
@@ -287,7 +287,7 @@
 
 - (void)setDouble:(double)value offset:(int)offset{
     
-    int64_t temp = value;
+    double temp = value;
     
     [self.parent replaceBytesInRange:NSMakeRange(offset, self.parent.length  >= (offset + 8) ? 8 : 0) withBytes:&temp];
     
