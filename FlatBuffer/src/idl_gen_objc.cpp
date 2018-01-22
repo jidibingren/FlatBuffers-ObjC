@@ -507,7 +507,7 @@ namespace flatbuffers {
                 // That, and Java Enums are expensive, and not universally liked.
                 
                 GenComment(enum_def.doc_comment, code_ptr, &lang.comment_config);
-                code += lang.enum_decl + GenTypeBasic(enum_def.underlying_type.base_type) + ", " + enum_def.name + ") ";
+                code += lang.enum_decl + GenTypeBasic(enum_def.underlying_type.base_type) + ", " + nameSpace(parser) + enum_def.name + ") ";
                 code += lang.open_curly;
 
                 for (auto it = enum_def.vals.vec.begin();
