@@ -94,17 +94,21 @@ namespace flatbuffers {
         public:
             
             static std::string nameSpace(const Parser &parser) {
-                
                 std::string namespace_general;
-        
-                auto &namespaces = parser.namespaces_.back()->components;
-                
-                for (auto it = namespaces.begin(); it != namespaces.end(); ++it) {
+                // If the user supplied a specific namespace to use for objective-C, use it,
+                // otherwise the default behavior is to concatenate namespaces into a single
+                // string.
+                if (parser.opts.objc_namespace.length() > 0) {
+                    namespace_general = parser.opts.objc_namespace;
+                } else {
 
-                    namespace_general += *it;
-                    
+                    auto &namespaces = parser.namespaces_.back()->components;
+
+                    for (auto it = namespaces.begin(); it != namespaces.end(); ++it) {
+                        namespace_general += *it;
+                    }
                 }
-                
+
                 return namespace_general;
             }
             
@@ -503,7 +507,7 @@ namespace flatbuffers {
                 // That, and Java Enums are expensive, and not universally liked.
                 
                 GenComment(enum_def.doc_comment, code_ptr, &lang.comment_config);
-                code += lang.enum_decl + GenTypeBasic(enum_def.underlying_type.base_type)+nameSpace(parser) + ", " + enum_def.name + ") ";
+                code += lang.enum_decl + GenTypeBasic(enum_def.underlying_type.base_type) + ", " + enum_def.name + ") ";
                 code += lang.open_curly;
 
                 for (auto it = enum_def.vals.vec.begin();
